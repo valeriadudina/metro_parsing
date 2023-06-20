@@ -4,7 +4,6 @@ from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 import json
-# запуск браузера
 
 driver = webdriver.Chrome()
 driver.get('https://online.metro-cc.ru/virtual/assortiment_rioba-4887')
@@ -16,6 +15,7 @@ btn_offline.click()
 btn_shop = driver.find_element(by = By.XPATH, value = '//*[@id="__layout"]/div/div/div[7]/div[2]/div[4]/button[1]')
 btn_shop.click()
 #click button to show more
+# this may be cycled to get more products 
 btn_more = driver.find_element(by = By.XPATH, value = '//*[@id="catalog-wrapper"]/main/div[3]/button')
 btn_more.click()
 # get data from page
@@ -53,7 +53,10 @@ for p in products:
 
     data.append({'id': id, 'name':name, 'brand':brand, 'regular_price': price_regular, 'promo_price' : price_promo, 'url': link })
 data_final = {'data':data}
-print(data_final)
-
+data_json = json.loads('{}')
+data_json['data']= data
+#write to json file
+with open('data.json', 'w') as f:
+    json.dump(data_json, f, ensure_ascii=False)
 # close browser
 driver.quit()
